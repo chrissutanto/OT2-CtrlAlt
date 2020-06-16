@@ -9,8 +9,8 @@ def sampleText():
 
 @app.route('/')
 def home():
-    getProtocol()
-    return render_template('home.html')
+    items = getProtocol()
+    return render_template('home.html', items=items)
 
 if __name__== '__main__':
     app.run(debug=True)

@@ -45,18 +45,18 @@ def getProtocol():
         q="'{}' in parents".format(protocol_folder_id), fields="nextPageToken, files(id, name)").execute()
     items = results.get('files', [])
 
-    #
-    if not items:
-        print('No files found.')
-    else:
-        print('Files:')
-        for item in items:
-            print(u'{0} ({1})'.format(item['name'], item['id']))
+    # #
+    # if not items:
+    #     print('No files found.')
+    # else:
+    #     print('Files:')
+    #     for item in items:
+    #         print(u'{0} ({1})'.format(item['name'], item['id']))
 
-    getDownload(items[1]['id'])
-    #
+    # getDownload(items[1]['id'])
+    # #
 
-    #return items
+    return items
 
 # Downloads file and adds .py extension
 def getDownload(file_id):
