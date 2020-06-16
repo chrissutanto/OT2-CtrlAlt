@@ -37,7 +37,15 @@ def getService():
     service = build('drive', 'v3', credentials=creds)
     return service
 
-# Returns list of 2-tuples (id, name) of items in protocol folder
+# Takes file ID, returns file name
+def getName(file_id):
+    items = getProtocol()
+    for protocol in items:
+        if protocol['id'] == file_id:
+            return protocol['name']
+
+
+# Returns list of dict (id, name) of items in protocol folder
 def getProtocol():
     protocol_folder_id = '1YDW21_cOkcpA3sYsSO1GaYzdc3cj2W4l'
     service = getService()
