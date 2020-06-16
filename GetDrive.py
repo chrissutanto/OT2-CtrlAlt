@@ -79,4 +79,12 @@ def getDownload(file_id):
     fh.seek(0)
     with open('{}.py'.format(file_id), 'wb') as f:
         shutil.copyfileobj(fh, f, length=131072)
+    
+    # if protocol_files folder doesn't exist, make directory
+    if os.path.isdir('protocol_files') == False:
+        os.mkdir('protocol_files')
+
+    # move newly downloaded protocol file into protocol_files directory
+    shutil.move('{}.py'.format(file_id), 'protocol_files\{}.py'.format(file_id))
+
 
