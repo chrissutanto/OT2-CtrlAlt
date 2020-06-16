@@ -37,20 +37,20 @@ def getService():
     service = build('drive', 'v3', credentials=creds)
     return service
 
-# Takes file ID, returns file name
-def getName(file_id):
-    items = getProtocol()
+# Takes file ID, returns gdrivefile
+def getProtocol(file_id):
+    items = getProtocolList()
     for protocol in items:
         if protocol['id'] == file_id:
-            return protocol['name']
+            return protocol
 
 
 # Returns list of dict (id, name) of items in protocol folder
-def getProtocol():
+def getProtocolList():
     protocol_folder_id = '1YDW21_cOkcpA3sYsSO1GaYzdc3cj2W4l'
     service = getService()
     results = service.files().list(
-        q="'{}' in parents".format(protocol_folder_id), fields="nextPageToken, files(id, name)").execute()
+        q="'{}' in parents".format(protocol_folder_id), fields="nextPageToken, files(id, name, modifiedTime)").execute()
     items = results.get('files', [])
 
     # #
