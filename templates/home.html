@@ -2,7 +2,7 @@
 {% block content %}
     <h1> Protocol </h1>
     {% for item in items%}
-        <a href="/{{ item.id }}">
+        <a href="/protocol/{{ item.id }}">
             <h2>{{ item.name }}</h2>
             <p>ID: {{ item.id }}</p>
             <p>Date Modified: {{ item.modifiedTime }}</p>

@@ -44,6 +44,14 @@ def getProtocol(file_id):
         if protocol['id'] == file_id:
             return protocol
 
+# takes list of files and changes format and time zone
+def adjustDate(items):
+    for protocol in items:
+        dateRFC339 = protocol['modifiedTime']
+        date = dateRFC339[0:10]
+        time = dateRFC339[11:19]
+        protocol['modifiedTime'] = date + ' ' + time + ' GMT'
+    return items
 
 # Returns list of dict (id, name) of items in protocol folder
 def getProtocolList():
@@ -52,7 +60,7 @@ def getProtocolList():
     results = service.files().list(
         q="'{}' in parents".format(protocol_folder_id), fields="nextPageToken, files(id, name, modifiedTime)").execute()
     items = results.get('files', [])
-
+    adjustDate(items)
     # #
     # if not items:
     #     print('No files found.')
@@ -86,5 +94,6 @@ def getDownload(file_id):
 
     # move newly downloaded protocol file into protocol_files directory
     shutil.move('{}.py'.format(file_id), 'protocol_files\{}.py'.format(file_id))
+    
 
 
