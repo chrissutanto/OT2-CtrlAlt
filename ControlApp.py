@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, flash
 from GetDrive import getProtocol, getProtocolList, getDownload
 from OT2Control import sendOT2, saveHistory
+from ScriptHandler import findLabware, findPipettes
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'd0080a835082e8d2cb14d386'
@@ -17,7 +18,9 @@ def home():
 def protocolPage(protocol_id):
     protocol = getProtocol(protocol_id)
     getDownload(protocol_id)
-    return render_template('protocol.html', id=protocol_id, name=protocol['name'], modifiedTime=protocol['modifiedTime'])
+    labware = findLabware(protocol_id)
+    pipettes = findPipettes(protocol_id)
+    return render_template('protocol.html', id=protocol_id, name=protocol['name'], modifiedTime=protocol['modifiedTime'], pipettes=pipettes, labware=labware)
 
 @app.route('/send/<protocol_id>')
 def sendPage(protocol_id):

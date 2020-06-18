@@ -1,18 +1,47 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>{{ name }}</h1>
-    <p>{{ id }}</p>
-    <p>{{ modifiedTime }}</p>
-
-    <div class='button'>
-        <a href="/send/{{ id }}">
-            Send to OT-2
-        </a>
+    <div class='container row w-auto'>
+        <div class='col-6'>
+            <h1>{{ name }}</h1>
+        </div>
+        
+        <div class='col-6'>
+            <div class='text-right align-middle'>
+                <div class='button'>
+                    <a href="/send/{{ id }}">
+                        Send to OT-2
+                    </a>
+                </div>
+            
+                <div class='button'>
+                    <a href="/">
+                        Home
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class='button'>
-        <a href="/">
-            Home
-        </a>
+    <div class='container protocol_box w-auto'>
+        <h3>Metadata</h2>
+        <p>ID: {{ id }}</p>
+        <p>Date Modified: {{ modifiedTime }}</p>
     </div>
+
+    <div class='container protocol_box w-auto'>
+        <h3>Pipettes</h2>
+        {% for pipette in pipettes%}
+            <h5>Location: {{ pipette.location }}</h5>
+            <p>{{ pipette.item }}</p>
+        {% endfor %}
+    </div>
+
+    <div class='container protocol_box w-auto'>
+        <h3>Labware</h2>
+        {% for item in labware%}
+            <h5>Deck {{ item.location }}:</h5>
+            <p>{{ item.item }}</p>
+        {% endfor %}
+    </div>
+
 {% endblock content %}

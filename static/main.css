@@ -8,6 +8,19 @@ body {
     color: #d1d1d1;
   }
   
+  .banner {
+    background-color: #5f788a;
+    padding: 10px;
+    border-radius: 5px
+  }
+
+  .protocol_box{
+    background: #29485f;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 5px 10px;
+  }
+
   .button {
     background-color: #488d4b; /* Green */
     border: none;
@@ -17,6 +30,7 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    border-radius: 5px
   }
 
   .bg-steel {
