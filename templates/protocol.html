@@ -24,6 +24,16 @@
 
     <div class='container protocol_box w-auto'>
         <h3>Metadata</h2>
+        {% for data in metadata %}
+            <div class='row'>
+                <div class='col-3 text-right'>
+                    <h5>{{ data.field.capitalize() }}: </h5>
+                </div>
+                <div class='col-9'>
+                    <p>{{ data.value }}</p>
+                </div>
+            </div>
+        {% endfor %}
         <div class='row'>
             <div class='col-3 text-right'>
                 <h5>ID: </h5>
@@ -41,7 +51,6 @@
                 <p>{{ modifiedTime }}</p>
             </div>
         </div>
-
     </div>
 
     <div class='container protocol_box w-auto'>

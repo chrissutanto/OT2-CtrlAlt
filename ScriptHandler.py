@@ -16,6 +16,15 @@ def getItem(line):
     location = re.search(pattern, afterComma)[1]
     return {'location': location, 'item': item}
 
+# Takes line containing metadata info, returns dictionary of {field:value}
+
+def getInfo(line):
+    pattern = "'(.*?)'"
+    field = re.search(pattern, line)[1]
+    afterColon = line[line.find(":"):]
+    value = re.search(pattern, afterColon)[1]
+    return {'field': field, 'value': value}
+
 # Takes labware, returns deck location, used to sort list of labware in order of deck location
 def getLocation(labware):
     return labware['location']
@@ -46,3 +55,14 @@ def findPipettes(protocol_id):
                 new_item = getItem(lines[i+1])
             pipettes.append(new_item)
     return pipettes
+
+# Takes protocol ID, returns list of dict containing metadata
+def findMetadata(protocol_id):
+    metadata = []
+    lines = getLines(protocol_id)
+    for i in range(len(lines)):
+        if "metadata" in lines[i]:
+            while not "}" in lines[i+1]:
+                metadata.append(getInfo(lines[i+1]))
+                i = i+1    
+    return metadata
