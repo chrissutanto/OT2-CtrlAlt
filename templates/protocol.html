@@ -24,23 +24,51 @@
 
     <div class='container protocol_box w-auto'>
         <h3>Metadata</h2>
-        <p>ID: {{ id }}</p>
-        <p>Date Modified: {{ modifiedTime }}</p>
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>ID: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ id }}</p>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>Date Modified: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ modifiedTime }}</p>
+            </div>
+        </div>
+
     </div>
 
     <div class='container protocol_box w-auto'>
         <h3>Pipettes</h2>
         {% for pipette in pipettes%}
-            <h5>Location: {{ pipette.location }}</h5>
-            <p>{{ pipette.item }}</p>
+            <div class='row'>
+                <div class='col-3 text-right'>
+                    <h5>{{ pipette.location.capitalize() }}: </h5>
+                </div>
+                <div class='col-9'>
+                    <p>{{ pipette.item }}</p>
+                </div>
+            </div>
         {% endfor %}
     </div>
 
     <div class='container protocol_box w-auto'>
         <h3>Labware</h2>
         {% for item in labware%}
-            <h5>Deck {{ item.location }}:</h5>
-            <p>{{ item.item }}</p>
+            <div class='row'>
+                <div class='col-3 text-right'>
+                    <h5>Deck {{ item.location }}:</h5>
+                </div>
+                <div class='col-9'>
+                    <p>{{ item.item }}</p>
+                </div>
+            </div>
         {% endfor %}
     </div>
 
