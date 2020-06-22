@@ -1,3 +1,4 @@
 import shutil
 
-shutil.rmtree('protocol_files')
+def deleteProtocolFiles():
+    shutil.rmtree('protocol_files')

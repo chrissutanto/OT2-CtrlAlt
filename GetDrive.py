@@ -74,6 +74,10 @@ def getProtocolList():
 
     return items
 
+# Deletes downloaded protocol files
+def deleteProtocolFiles():
+    shutil.rmtree('protocol_files')
+
 # Downloads file and adds .py extension
 def getDownload(file_id):
     service = getService()

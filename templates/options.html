@@ -2,26 +2,25 @@
 {% block content %}
 <div class='container row w-auto'>
     <div class='col-6'>
-        <h1>Protocol</h1>
+        <h1>Options</h1>
     </div>
+    
     <div class='col-6'>
         <div class='text-right align-middle'>   
             <div class='button'>
-                <a href="/options">
-                    Options
+                <a href="/">
+                    Home
                 </a>
             </div>
         </div>
     </div>
 </div>
-    
-    {% for item in items%}
+
+
     <div class='container protocol_box w-auto'>
-        <a href="/protocol/{{ item.id }}">
-            <h2>{{ item.name }}</h2>
-            <p>ID: {{ item.id }}</p>
-            <p>Date Modified: {{ item.modifiedTime }}</p>
+        <a href="/deleteProtocol">
+            <h2>Delete cached protocol</h2>
         </a>
     </div>
-    {% endfor %}
+
 {% endblock content %}
