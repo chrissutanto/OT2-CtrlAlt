@@ -7,6 +7,19 @@
         
         <div class='col-6'>
             <div class='text-right align-middle'>
+                {% for data in metadata %}
+                    {% if data.field == 'modify' or data.field == 'Modify' %}
+                        {% if data.value == 'True' or data.value == 'true' %}
+                            <div class='button'>
+                                <a href="/modify/{{ id }}">
+                                    Modify
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+
                 <div class='button'>
                     <a href="/send/{{ id }}">
                         Send to OT-2
@@ -52,6 +65,27 @@
             </div>
         </div>
     </div>
+
+    {% for data in metadata %}
+        {% if data.field == 'modify' or data.field == 'Modify' %}
+            {% if data.value == 'True' or data.value == 'true' %}
+            <div class='container protocol_box w-auto'>
+                <h3>Modifiable Fields</h2>
+                    {% for modField in modFields%}
+                    <div class='row'>
+                        <div class='col-3 text-right'>
+                            <h5>{{ modField.field.capitalize() }}: </h5>
+                        </div>
+                        <div class='col-9'>
+                            <p>{{ modField.value }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
 
     <div class='container protocol_box w-auto'>
         <h3>Pipettes</h2>

@@ -17,12 +17,17 @@ def getItem(line):
     return {'location': location, 'item': item}
 
 # Takes line containing metadata info, returns dictionary of {field:value}
-
 def getInfo(line):
     pattern = "'(.*?)'"
     field = re.search(pattern, line)[1]
     afterColon = line[line.find(":"):]
     value = re.search(pattern, afterColon)[1]
+    return {'field': field, 'value': value}
+
+# Takes line containing modifiable field, returns dictionary of {field:value}
+def getField(line):
+    field = line.split("=")[0].strip() 
+    value = line.split("=")[1].strip()
     return {'field': field, 'value': value}
 
 # Takes labware, returns deck location, used to sort list of labware in order of deck location
@@ -65,4 +70,35 @@ def findMetadata(protocol_id):
             while not "}" in lines[i+1]:
                 metadata.append(getInfo(lines[i+1]))
                 i = i+1    
+            break
     return metadata
+
+# Returns modifiable fields and their default values
+def findModFields(protocol_id):
+    fields = []
+    lines = getLines(protocol_id)
+    for i in range(len(lines)):
+        if "# modify" in lines[i]:
+            while not "# end modify" in lines[i+1]:
+                fields.append(getField(lines[i+1]))
+                i = i+1
+    return fields
+
+# Takes list of tuples representing user input, updates script modfields
+def editModFields(protocol_id, user_input):
+    lines = getLines(protocol_id)
+    input_no = 0
+    for i in range(len(lines)):
+        if "# modify" in lines[i]:
+            while not "# end modify" in lines[i+1]:
+                if "=" in lines[i+1]:
+                    field = lines[i+1].split("=")[0]
+                    new_value = user_input[input_no][1]['value']
+                    lines[i+1] = field + "= " + new_value + "\n"
+                    print("writing onto line: " + str(i+1))
+                    input_no = input_no + 1
+                i = i + 1
+    protocol_file = open("protocol_files/{}.py".format(protocol_id), "w")
+    protocol_file.writelines(lines)
+    protocol_file.close()
+    print("protocol edited")

@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='container row w-auto'>
+    <div class='col-6'>
+        <h1>Modify {{ name }}</h1>
+    </div>
+    
+    <div class='col-6'>
+        <div class='text-right align-middle'>   
+            <button class="button" type="submit" form="form">Submit</button>
+            <div class='button'>
+                <a href="/">
+                    Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='container protocol_box w-auto'>
+    <form id="form" method="post" action="">
+        <!-- {{ form.name }}
+        {{ form.hidden_tag() }}
+        <br/>
+        {% for entry in form.fields %}
+            {{ 1 }}
+            {{ entry() }}
+        {% endfor %} -->
+    
+        {{ form.hidden_tag() }}
+        {% for modField in modFields %}
+            <div class='row mt-3'>
+                <div class='col-3 text-right'>
+                    <h5>{{ modField.field.capitalize() }}: </h5>
+                </div>
+                <div class='col-9 mt-n3'>
+                    <p>{{ form.fields[loop.index0] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </form>
+</div>
+
+
+{% endblock content %}

@@ -76,7 +76,8 @@ def getProtocolList():
 
 # Deletes downloaded protocol files
 def deleteProtocolFiles():
-    shutil.rmtree('protocol_files')
+    if os.path.exists('protocol_files'):
+        shutil.rmtree('protocol_files')
 
 # Downloads file and adds .py extension
 def getDownload(file_id):
