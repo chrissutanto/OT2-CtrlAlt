@@ -33,8 +33,11 @@
                 <div class='col-3 text-right'>
                     <h5>{{ modField.field.capitalize() }}: </h5>
                 </div>
-                <div class='col-9 mt-n3'>
+                <div class='col-3 mt-n3'>
                     <p>{{ form.fields[loop.index0] }}</p>
+                </div>
+                <div class='col-6'>
+                    <p>{{ modField.description }}</p>
                 </div>
             </div>
         {% endfor %}

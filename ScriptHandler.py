@@ -28,7 +28,10 @@ def getInfo(line):
 def getField(line):
     field = line.split("=")[0].strip() 
     value = line.split("=")[1].strip()
-    return {'field': field, 'value': value}
+    description = value.split("#")[1].lstrip().capitalize()
+    value = value.split("#")[0]
+    print({'field': field, 'value': value, 'description': description})
+    return {'field': field, 'value': value, 'description': description}
 
 # Takes labware, returns deck location, used to sort list of labware in order of deck location
 def getLocation(labware):
