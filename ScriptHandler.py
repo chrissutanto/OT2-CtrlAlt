@@ -28,9 +28,10 @@ def getInfo(line):
 def getField(line):
     field = line.split("=")[0].strip() 
     value = line.split("=")[1].strip()
-    description = value.split("#")[1].lstrip().capitalize()
-    value = value.split("#")[0]
-    print({'field': field, 'value': value, 'description': description})
+    description = ""
+    if "#" in value:
+        description = value.split("#")[1].lstrip().capitalize()
+        value = value.split("#")[0]
     return {'field': field, 'value': value, 'description': description}
 
 # Takes labware, returns deck location, used to sort list of labware in order of deck location
@@ -98,10 +99,8 @@ def editModFields(protocol_id, user_input):
                     field = lines[i+1].split("=")[0]
                     new_value = user_input[input_no][1]['value']
                     lines[i+1] = field + "= " + new_value + "\n"
-                    print("writing onto line: " + str(i+1))
                     input_no = input_no + 1
                 i = i + 1
     protocol_file = open("protocol_files/{}.py".format(protocol_id), "w")
     protocol_file.writelines(lines)
     protocol_file.close()
-    print("protocol edited")
