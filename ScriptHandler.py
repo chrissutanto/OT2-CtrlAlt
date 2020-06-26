@@ -98,7 +98,11 @@ def editModFields(protocol_id, user_input):
                 if "=" in lines[i+1]:
                     field = lines[i+1].split("=")[0]
                     new_value = user_input[input_no][1]['value']
-                    lines[i+1] = field + "= " + new_value + "\n"
+                    if "#" in lines[i+1]:
+                        description = lines[i+1].split("#")[1]
+                        lines[i+1] = field + "= " + new_value + " # " + description.lstrip().capitalize()
+                    else:
+                        lines[i+1] = field + "= " + new_value + "\n"
                     input_no = input_no + 1
                 i = i + 1
     protocol_file = open("protocol_files/{}.py".format(protocol_id), "w")
