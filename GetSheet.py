@@ -52,3 +52,50 @@ def saveHistory(protocol):
 def sendOT2(protocol):
     saveHistory(protocol)
     return None
+
+# Takes rowdata, constructs 2D array of dict containing {cell color, cell value}
+def make2dArray(rowdata):
+    array = [] # pretty much a list of rows
+    for row in range(len(rowdata)):
+        temp_row = []
+        for column in range(len(rowdata[row]['values'])):
+            if 'userEnteredValue' in rowdata[row]['values'][column]:
+                cell_value = rowdata[row]['values'][column]['userEnteredValue']['stringValue']
+            else:
+                cell_value = None
+            if 'backgroundColor' in rowdata[row]['values'][column]['userEnteredFormat']:
+                cell_color = rowdata[row]['values'][column]['userEnteredFormat']['backgroundColor']
+            else:
+                cell_color = None
+            temp_row.append({'color':cell_color, 'value':cell_value})
+        array.append(temp_row)
+    return array
+
+# Takes well map id, returns dictionary (different ranges) of dictionaries (range, values, etc)
+def getWellMapData(wellmap_id):
+    service = getService()
+    sheet = service.spreadsheets()
+
+    source1_range = "Sheet1!H5:M8"
+    source2_range = "Sheet1!H12:S19"
+    destination_range = "Sheet1!B5:E12"
+    ranges = [source1_range, source2_range, destination_range]
+    range_titles = ['Source1', 'Source2', 'Destination']
+
+    include_grid_data = True
+
+    range_no = 0
+    sheet_info = {}
+
+    for range in ranges:
+        request = sheet.get(spreadsheetId=wellmap_id, ranges=range, includeGridData=include_grid_data)
+        result = request.execute()
+        rowdata = result['sheets'][0]['data'][0]['rowData']
+        sheet_info[range_titles[range_no]] = make2dArray(rowdata)
+        range_no = range_no + 1
+    
+    return(sheet_info)
+
+
+    # TODO: make three 2D arrays, one for each destination/source. each array element is a dict of color and value
+

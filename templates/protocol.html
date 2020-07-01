@@ -19,12 +19,20 @@
                     {% endif %}
                 {% endfor %}
 
-
-                <div class='button'>
-                    <a href="/send/{{ id }}">
-                        Send to OT-2
-                    </a>
-                </div>
+                 <!-- The check for well-map == true happens a couple times, fix this -->
+                {% if wellmap.lower() == 'true' %}
+                    <div class='button'>
+                        <a href="/wellmapselect/{{ id }}">
+                            Select Well Map
+                        </a>
+                    </div>
+                {% else %}
+                    <div class='button'>
+                        <a href="/send/{{ id }}">
+                            Send to OT-2
+                        </a>
+                    </div>
+                {% endif %}
             
                 <div class='button'>
                     <a href="/">
@@ -67,8 +75,8 @@
     </div>
 
     {% for data in metadata %}
-        {% if data.field == 'modify' or data.field == 'Modify' %}
-            {% if data.value == 'True' or data.value == 'true' %}
+        {% if data.field.lower() == 'modify' %}
+            {% if data.value.lower() == 'true' %}
             <div class='container protocol_box w-auto'>
                 <h3>Modifiable Fields</h2>
                     {% for modField in modFields%}

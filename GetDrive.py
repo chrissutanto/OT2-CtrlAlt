@@ -43,6 +43,12 @@ def getProtocol(file_id):
     for protocol in items:
         if protocol['id'] == file_id:
             return protocol
+            
+def getWellMap(file_id):
+    items = getWellMapList()
+    for wellMap in items:
+        if wellMap['id'] == file_id:
+            return wellMap
 
 # takes list of files and changes format and time zone
 def adjustDate(items):
@@ -72,6 +78,16 @@ def getProtocolList():
     # getDownload(items[1]['id'])
     # #
 
+    return items
+
+# Returns list of dict (id, name) of items in well map folder
+def getWellMapList():
+    protocol_folder_id = '1VJckKGdHA3VGVN3K26SwUzXLEtuJgqQ4'
+    service = getService()
+    results = service.files().list(
+        q="'{}' in parents".format(protocol_folder_id), fields="nextPageToken, files(id, name, modifiedTime)").execute()
+    items = results.get('files', [])
+    adjustDate(items)
     return items
 
 # Deletes downloaded protocol files

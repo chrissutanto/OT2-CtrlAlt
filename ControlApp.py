@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
-from GetDrive import getProtocol, getProtocolList, getDownload, deleteProtocolFiles
-from OT2Control import sendOT2, saveHistory
+from GetDrive import getProtocol, getProtocolList, getDownload, deleteProtocolFiles, getWellMapList, getWellMap
+from GetSheet import sendOT2, saveHistory, getWellMapData
 from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields
 import os.path
 from Forms import modifyForm
@@ -27,17 +27,35 @@ def protocolPage(protocol_id):
     pipettes = findPipettes(protocol_id)
     metadata = findMetadata(protocol_id)
     modFields = []
+    wellmap = 'false'
     for data in metadata:
-        if data['field'] == 'modify' or data['field'] == 'Modify':
-            if data['value'] == 'true' or data['value'] == 'True':
+        if data['field'].lower() == 'modify':
+            if data['value'].lower() == 'true':
                 modFields = findModFields(protocol_id)
-    return render_template('protocol.html', id=protocol_id, name=protocol['name'], modifiedTime=protocol['modifiedTime'], pipettes=pipettes, labware=labware, metadata=metadata, modFields=modFields)
+        if data['field'].lower() == 'well-map':
+            if data['value'].lower() == 'true':
+                wellmap = 'true'
+    return render_template('protocol.html', id=protocol_id, name=protocol['name'], modifiedTime=protocol['modifiedTime'], pipettes=pipettes, labware=labware, metadata=metadata, modFields=modFields, wellmap=wellmap)
 
 @app.route('/send/<protocol_id>')
 def sendPage(protocol_id):
     protocol = getProtocol(protocol_id)
     sendOT2(protocol)
     return render_template('send.html', id=protocol_id, name=protocol['name'])
+
+@app.route('/wellmapselect/<protocol_id>')
+def wellMapSelectPage(protocol_id):
+    protocol = getProtocol(protocol_id)
+    items = getWellMapList()
+    return render_template('wellmapselect.html', id=protocol_id, name=protocol['name'], items=items)
+
+@app.route('/wellmap/<protocol_id>/<wellmap_id>')
+def wellMapPage(protocol_id, wellmap_id):
+    protocol = getProtocol(protocol_id)
+    wellmap = getWellMap(wellmap_id)
+    wellmapdata = getWellMapData(wellmap_id)
+    print(wellmapdata)
+    return render_template('wellmap.html', protocol_id=protocol_id, protocol_name=protocol['name'], wellmap_id=wellmap_id, wellmap_name=wellmap['name'], modifiedTime=wellmap['modifiedTime'], wellmapdata=wellmapdata)
 
 @app.route('/options')
 def optionsPage():
@@ -65,17 +83,6 @@ def modifyPage(protocol_id):
         return redirect(url_for('protocolPage', protocol_id=protocol_id))
     protocol = getProtocol(protocol_id)
     return render_template('modify.html', id=protocol_id, name=protocol['name'], form=form, modFields=modFields)
-
-# @app.route('/modify/<protocol_id>', methods=['POST'])
-# def modifyPOST(protocol_id):
-#     # text = request.form['text']
-#     # processed_text = text.upper()
-#     field1 = request.form.get("field 1")
-#     field2 = request.form.get("field 2")
-#     print(field1)
-#     print(field2)
-#     return redirect(url_for('protocolPage', protocol_id=protocol_id))
-
 
 if __name__== '__main__':
     app.run(debug=True)

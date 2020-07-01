@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='container row w-auto'>
+    <div class='col-8'>
+        <h1>{{ name }} — Select a Well Map</h1>
+    </div>
+    <div class='col-4'>
+        <div class='text-right align-middle'>   
+            <div class='button'>
+                <a href="/protocol/{{ id }}">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    {% for item in items%}
+    <div class='container protocol_box w-auto'>
+        <a href="/wellmap/{{ id }}/{{ item.id }}">
+            <h2>{{ item.name }}</h2>
+            <p>ID: {{ item.id }}</p>
+            <p>Date Modified: {{ item.modifiedTime }}</p>
+        </a>
+    </div>
+    {% endfor %}
+{% endblock content %}

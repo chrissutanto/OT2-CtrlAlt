@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class='container row w-auto'>
+        <div class='col-6'>
+            <h1>{{ protocol_name }} — {{ wellmap_name }} </h1>
+        </div>
+        
+        <div class='col-6'>
+            <div class='text-right align-middle'>
+
+                <div class='button'>
+                    <a href="/wellmapselect/{{ protocol_id }}">
+                        Back
+                    </a>
+                </div>
+                <div class='button'>
+                    <a href="/send">
+                        Send to OT-2
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class='container protocol_box w-auto'>
+        <h3>Metadata</h2>
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>ID: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ wellmap_id }}</p>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>Date Modified: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ modifiedTime }}</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class='container protocol_box w-auto'>
+        <h3>Destination</h2>
+        <p> {{ wellmapdata.Destination }}</p>
+    </div>
+
+    <div class='container protocol_box w-auto'>
+        <h3>Master Mixes (Source 1)</h3>
+        <p> {{ wellmapdata.Source1 }}</p>
+    </div>
+
+    <div class='container protocol_box w-auto'>
+        <h3>cDNA Samples (Source 2)</h3>
+        <p> {{ wellmapdata.Source2 }}</p>
+    </div>
+
+{% endblock content %}
