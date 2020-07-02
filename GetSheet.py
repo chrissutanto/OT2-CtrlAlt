@@ -33,9 +33,14 @@ def getService():
     service = build('sheets', 'v4', credentials=creds)
     return service
 
-def saveHistory(protocol):
+def saveHistory(protocol, wellmap):
     service = getService()
-    list = [[protocol['name']], [protocol['id']], [date.today().strftime("%d/%m/%Y")], [datetime.now().strftime("%H:%M:%S")]]
+    wellmapLink = ''
+    wellmapName = ''
+    if wellmap != None:
+        wellmapName = wellmap['name']
+        wellmapLink= 'docs.google.com/spreadsheets/d/' + wellmap['id']
+    list = [[protocol['name']], [protocol['id']], [date.today().strftime("%d/%m/%Y")], [datetime.now().strftime("%H:%M:%S")], [wellmapName], [wellmapLink]]
     resource = {
         "majorDimension": "COLUMNS",
         "values": list
@@ -49,8 +54,8 @@ def saveHistory(protocol):
     ).execute()
     print('history saved')
 
-def sendOT2(protocol):
-    saveHistory(protocol)
+def sendOT2(protocol, wellmap):
+    saveHistory(protocol, wellmap)
     return None
 
 # Takes rowdata, constructs 2D array of dict containing {cell color, cell value}
@@ -96,6 +101,4 @@ def getWellMapData(wellmap_id):
     
     return(sheet_info)
 
-
-    # TODO: make three 2D arrays, one for each destination/source. each array element is a dict of color and value
 

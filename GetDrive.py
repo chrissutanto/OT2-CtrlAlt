@@ -95,6 +95,14 @@ def deleteProtocolFiles():
     if os.path.exists('protocol_files'):
         shutil.rmtree('protocol_files')
 
+# # Takes google doc id and publishes the document
+# def publishDoc(doc_id):
+#     service = getService()
+#     revision = service.revisions().get(fileId=doc_id, revisionId=1).execute()
+#     revision['publishAuto'] = True
+#     revision['published'] = True
+#     service.revisions().update(fileId=doc_id, revisionId=1, body=revision).execute()
+
 # Downloads file and adds .py extension
 def getDownload(file_id):
     service = getService()

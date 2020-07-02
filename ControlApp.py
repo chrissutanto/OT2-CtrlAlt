@@ -40,8 +40,17 @@ def protocolPage(protocol_id):
 @app.route('/send/<protocol_id>')
 def sendPage(protocol_id):
     protocol = getProtocol(protocol_id)
-    sendOT2(protocol)
+    wellmap = None
+    sendOT2(protocol, wellmap)
     return render_template('send.html', id=protocol_id, name=protocol['name'])
+
+@app.route('/send/<protocol_id>/<wellmap_id>')
+def sendPageWellMap(protocol_id, wellmap_id):
+    protocol = getProtocol(protocol_id)
+    wellmap = getWellMap(wellmap_id)
+    name = protocol['name'] + " with " + wellmap['name']
+    sendOT2(protocol, wellmap)
+    return render_template('send.html', id=protocol_id, name=name)
 
 @app.route('/wellmapselect/<protocol_id>')
 def wellMapSelectPage(protocol_id):
@@ -54,7 +63,7 @@ def wellMapPage(protocol_id, wellmap_id):
     protocol = getProtocol(protocol_id)
     wellmap = getWellMap(wellmap_id)
     wellmapdata = getWellMapData(wellmap_id)
-    print(wellmapdata)
+    # publishDoc(wellmap_id)
     return render_template('wellmap.html', protocol_id=protocol_id, protocol_name=protocol['name'], wellmap_id=wellmap_id, wellmap_name=wellmap['name'], modifiedTime=wellmap['modifiedTime'], wellmapdata=wellmapdata)
 
 @app.route('/options')
