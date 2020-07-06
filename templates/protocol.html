@@ -7,10 +7,16 @@
         
         <div class='col-6'>
             <div class='text-right align-middle'>
+                <div class='button tertiary-highlight'>
+                    <a href="/">
+                        Home
+                    </a>
+                </div>
+
                 {% for data in metadata %}
                     {% if data.field == 'modify' or data.field == 'Modify' %}
                         {% if data.value == 'True' or data.value == 'true' %}
-                            <div class='button'>
+                            <div class='button secondary-highlight'>
                                 <a href="/modify/{{ id }}">
                                     Modify
                                 </a>
@@ -21,24 +27,19 @@
 
                  <!-- The check for well-map == true happens a couple times, fix this -->
                 {% if wellmap.lower() == 'true' %}
-                    <div class='button'>
+                    <div class='button highlight'>
                         <a href="/wellmapselect/{{ id }}">
                             Select Well Map
                         </a>
                     </div>
                 {% else %}
-                    <div class='button'>
-                        <a href="/send/{{ id }}">
-                            Send to OT-2
+                    <div class='button highlight'>
+                        <a href="/confirm/{{ id }}">
+                            Continue
                         </a>
                     </div>
                 {% endif %}
             
-                <div class='button'>
-                    <a href="/">
-                        Home
-                    </a>
-                </div>
             </div>
         </div>
     </div>

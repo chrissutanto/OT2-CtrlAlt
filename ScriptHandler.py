@@ -1,4 +1,4 @@
-import re
+import re, os
 
 # Protocol must contain item type and location in same line, location must be defined in the load statement
 
@@ -108,3 +108,12 @@ def editModFields(protocol_id, user_input):
     protocol_file = open("protocol_files/{}.py".format(protocol_id), "w")
     protocol_file.writelines(lines)
     protocol_file.close()
+
+# Takes dictionary (different ranges) of dictionaries (range, values, etc), and edits protocol file with appropriate code
+def editScriptRTPCR(protocol_id, well_map_info):
+    return None
+
+# Takes protocol id, simulates protocol file and returns log
+def simulateProtocol(protocol_id):
+    print(type(os.popen("opentrons_simulate.exe protocol_files\{}.py".format(protocol_id)).read()))
+    return os.popen("opentrons_simulate.exe protocol_files\{}.py".format(protocol_id)).read().splitlines()

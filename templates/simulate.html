@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='container row w-auto'>
+    <div class='col-6'>
+        <h1>Simulate</h1>
+    </div>
+    <div class='col-6'>
+        <div class='text-right align-middle'>   
+            <div class='button tertiary-highlight'>
+                <a href="/protocol/{{ protocol_id }}">
+                    Back
+                </a>
+                <!-- goes back to protocol page, but should instead redirect to confirmation page -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='protocol_box'>
+    {% for line in simulationLog %}
+        <p class='text-nowrap'>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p>
+    {% endfor %}
+</div>
+
+
+<p>{{ protocol_name }}</p>
+<p>{{ wellmap_name }}</p>
+{% endblock content %}

@@ -8,6 +8,18 @@ body {
     color: #d1d1d1;
   }
   
+  .highlight {
+    background-color: #0f5e13 !important;
+  }
+
+  .secondary-highlight{
+    background-color: #39663b !important;
+  }
+
+  .tertiary-highlight{
+    background-color: #59795a !important
+  }
+
   .banner {
     background-color: #5f788a;
     padding: 10px;
@@ -48,7 +60,7 @@ body {
   .site-header .navbar-nav .nav-link.active {
     font-weight: 500;
   }
-  
+
   .content-section {
     background: #ffffff;
     padding: 10px 20px;

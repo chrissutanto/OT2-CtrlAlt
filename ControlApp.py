@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
 from GetDrive import getProtocol, getProtocolList, getDownload, deleteProtocolFiles, getWellMapList, getWellMap
 from GetSheet import sendOT2, saveHistory, getWellMapData
-from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields
+from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, editScriptRTPCR, simulateProtocol
 import os.path
 from Forms import modifyForm
 from flask_wtf import Form
@@ -63,18 +63,43 @@ def wellMapPage(protocol_id, wellmap_id):
     protocol = getProtocol(protocol_id)
     wellmap = getWellMap(wellmap_id)
     wellmapdata = getWellMapData(wellmap_id)
-    # publishDoc(wellmap_id)
     return render_template('wellmap.html', protocol_id=protocol_id, protocol_name=protocol['name'], wellmap_id=wellmap_id, wellmap_name=wellmap['name'], modifiedTime=wellmap['modifiedTime'], wellmapdata=wellmapdata)
+
+@app.route('/wellmap/<protocol_id>/<wellmap_id>/confirm')
+def wellMapConfirm(protocol_id, wellmap_id):
+    protocol = getProtocol(protocol_id)
+    wellmap = getWellMap(wellmap_id)
+    wellmapdata = getWellMapData(wellmap_id)
+    editScriptRTPCR(protocol_id, wellmapdata)
+    modfields = []
+    modFields = findModFields(protocol_id)
+    return render_template('confirm.html', protocol_id=protocol_id, protocol_name=protocol['name'],  modifiedTimeProtocol=protocol['modifiedTime'], wellmap_id=wellmap_id, wellmap_name=wellmap['name'], wellmapdata=wellmapdata,  modifiedTimeWellmap=wellmap['modifiedTime'], modFields=modFields)
+
+@app.route('/confirm/<protocol_id>')
+def protocolConfirm(protocol_id):
+    protocol = getProtocol(protocol_id)
+    modfields = []
+    modFields = findModFields(protocol_id)
+    return render_template('confirm.html', protocol_id=protocol_id, protocol_name=protocol['name'], modifiedTimeProtocol=protocol['modifiedTime'], wellmap_info=None, wellmap_name=None, wellmapdata=None, modFields=modFields)
+
+@app.route('/simulate/<protocol_id>')
+def simulatePage(protocol_id):
+    simulationLog = simulateProtocol(protocol_id)
+    return render_template('simulate.html', simulationLog=simulationLog)
 
 @app.route('/options')
 def optionsPage():
     return render_template('options.html')
 
+@app.route('/history')
+def historyPage():
+    return render_template('history.html')
+
 @app.route('/deleteProtocol')
 def deletePage():
     deleteProtocolFiles()
     message = 'Protocol cache deleted'
-    return render_template('confirm.html', message=message)
+    return redirect(url_for('home'))
 
 @app.route('/modify/<protocol_id>', methods=['post', 'get'])
 def modifyPage(protocol_id):

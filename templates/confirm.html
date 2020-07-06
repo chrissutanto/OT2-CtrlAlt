@@ -2,17 +2,107 @@
 {% block content %}
 <div class='container row w-auto'>
     <div class='col-6'>
-        <h1>{{ message }}</h1>
+        <h1>Confirm</h1>
     </div>
-    
+
     <div class='col-6'>
         <div class='text-right align-middle'>   
-            <div class='button'>
-                <a href="/">
-                    Home
+            <div class='button tertiary-highlight'>
+                <a href="/protocol/{{ protocol_id }}">
+                    Back
+                </a>
+            </div>
+            <div class='button secondary-highlight'>
+                <a href="/simulate/{{ protocol_id }}">
+                    Simulate
+                </a>
+            </div>
+            <div class='button highlight'>
+                <a href="/send/{{ protocol_id }}/{{ wellmap_id}}">
+                    Send to OT-2
                 </a>
             </div>
         </div>
     </div>
 </div>
+
+<div class='container protocol_box w-auto'>
+    <h3>Protocol</h2>
+    <div class='row'>
+        <div class='col-3 text-right'>
+            <h5>Name: </h5>
+        </div>
+        <div class='col-9'>
+            <p>{{ protocol_name }}</p>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-3 text-right'>
+            <h5>ID: </h5>
+        </div>
+        <div class='col-9'>
+            <p>{{ protocol_id }}</p>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-3 text-right'>
+            <h5>Date Modified: </h5>
+        </div>
+        <div class='col-9'>
+            <p>{{ modifiedTimeProtocol }}</p>
+        </div>
+    </div>
+</div>
+
+{% if wellmapdata!= none %}
+    <div class='container protocol_box w-auto'>
+        <h3>Well Map</h2>
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>Name: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ wellmap_name }}</p>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>ID: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ wellmap_id }}</p>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-3 text-right'>
+                <h5>Date Modified: </h5>
+            </div>
+            <div class='col-9'>
+                <p>{{ modifiedTimeWellmap }}</p>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if modFields!=[] %}
+    <div class='container protocol_box w-auto'>
+        <h3>Modifiable Fields</h2>
+            {% for modField in modFields%}
+            <div class='row'>
+                <div class='col-3 text-right'>
+                    <h5>{{ modField.field.capitalize() }}: </h5>
+                </div>
+                <div class='col-3'>
+                    <p>{{ modField.value }}</p>
+                </div>
+                <div class='col-6'>
+                    <p>{{ modField.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 {% endblock content %}
