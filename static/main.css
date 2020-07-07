@@ -26,6 +26,11 @@ body {
     border-radius: 5px
   }
 
+  .simulation_text{
+    padding-left: 2em;
+    text-indent: -2em;
+  }
+  
   .protocol_box{
     background: #29485f;
     border-radius: 5px;

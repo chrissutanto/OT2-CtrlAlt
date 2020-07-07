@@ -2,7 +2,7 @@
 {% block content %}
 <div class='container row w-auto'>
     <div class='col-6'>
-        <h1>Simulate</h1>
+        <h1>{{ protocol_name }} Simulation Log</h1>
     </div>
     <div class='col-6'>
         <div class='text-right align-middle'>   
@@ -18,7 +18,8 @@
 
 <div class='protocol_box'>
     {% for line in simulationLog %}
-        <p class='text-nowrap'>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p>
+        <!-- <p class='text-nowrap'>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p> -->
+        <p class='simulation_text'>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p>
     {% endfor %}
 </div>
 
