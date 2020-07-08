@@ -109,11 +109,102 @@ def editModFields(protocol_id, user_input):
     protocol_file.writelines(lines)
     protocol_file.close()
 
+# findMatch: takes source info, destination info, and key to match (value, color) and returns list of matches
+def findMatch(source, destination, matchKey):
+    matches = []
+    for row in destination:
+        temp_row = []
+        for well in row:
+            if well[matchKey] == source[matchKey] and source[matchKey] != None:
+                temp_row.append(True)
+            else:
+                temp_row.append(False) 
+        matches.append(temp_row)
+    return matches
+
+# takes source title (as defined in protocol file), source location, and 2d array of matches, returns string to write to script
+def generateCommand(source_title, source_location,  matches):
+    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    if source_title == 'source_1':
+        volume = 'source_1_volume'
+    elif source_title == 'source_2':
+        volume = 'source_2_volume'
+
+    command = ''
+
+    destinations = ''
+
+    row_idx = 0
+    match = False
+    for row in matches:
+        col_idx = 0
+        for well in row:
+            if well:
+                match = True
+                for i in range(3):
+                    destinations = destinations + "'" + letters[row_idx] + str(col_idx * 3 + i + 1) + "', "
+            col_idx = col_idx + 1
+
+        row_idx = row_idx + 1
+
+    destinations = destinations[:-2]
+    if match:
+        command =  "\n" + "\t" + 'single_pipette.distribute(' + volume + ', ' + source_title + '.wells_by_name()[' + source_location + '], destination.wells_by_name()[' + destinations + '])'
+    return command
+
+# takes protocol id and command string, writes string onto file that matches the id
+def writeToScript(protocol_id, command):
+    with open("protocol_files/{}.py".format(protocol_id), 'a') as file:
+        file.write(command)
+    return None
+
+# Clears all lines in protocol file after "# commands"
+def clearCommands(protocol_id):
+    lines = getLines(protocol_id)
+    for i in range(len(lines)):
+        if "# commands" in lines[i]:
+            protocol_file = open("protocol_files/{}.py".format(protocol_id), "w")
+            lines = lines[:i+1]
+            protocol_file.writelines(lines)
+            protocol_file.close()
+            break
+            
+
+
+
 # Takes dictionary (different ranges) of dictionaries (range, values, etc), and edits protocol file with appropriate code
 def editScriptRTPCR(protocol_id, well_map_info):
-    return None
+    Source1 = well_map_info['Source1']
+    Source2 = well_map_info['Source2']
+    Destination = well_map_info['Destination']
+    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+
+    # for each cell in source 1:
+        # find destination wells with same color (findMatch)
+        # distribute to all matches with single-channel pipette (appendScript)
+
+    clearCommands(protocol_id)
+
+    row_idx = 0
+    for row in Source1:
+        col_idx = 0
+        for well in row:
+            matches = findMatch(well, Destination, 'color')
+            command = generateCommand('source_1', letters[row_idx] + str(col_idx+1), matches)
+            writeToScript(protocol_id, command)
+            col_idx = col_idx + 1
+        row_idx = row_idx + 1
+
+    row_idx = 0
+    for row in Source2:
+        col_idx = 0
+        for well in row:
+            matches = findMatch(well, Destination, 'value')
+            command = generateCommand('source_2', letters[row_idx] + str(col_idx+1), matches)
+            writeToScript(protocol_id, command)
+            col_idx = col_idx + 1
+        row_idx = row_idx + 1
 
 # Takes protocol id, simulates protocol file and returns log
 def simulateProtocol(protocol_id):
-    print(type(os.popen("opentrons_simulate.exe protocol_files\{}.py".format(protocol_id)).read()))
     return os.popen("opentrons_simulate.exe protocol_files\{}.py".format(protocol_id)).read().splitlines()

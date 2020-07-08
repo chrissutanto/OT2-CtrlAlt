@@ -85,7 +85,8 @@ def protocolConfirm(protocol_id):
 @app.route('/simulate/<protocol_id>')
 def simulatePage(protocol_id):
     simulationLog = simulateProtocol(protocol_id)
-    return render_template('simulate.html', simulationLog=simulationLog)
+    protocol = getProtocol(protocol_id)
+    return render_template('simulate.html', simulationLog=simulationLog, protocol_id=protocol_id, protocol_name=protocol['name'])
 
 @app.route('/options')
 def optionsPage():

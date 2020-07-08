@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class='container row w-auto'>
-    <div class='col-6'>
-        <h1>{{ protocol_name }} Simulation Log</h1>
+    <div class='col-9'>
+        <h1>Simulation Log — {{ protocol_name }} </h1>
     </div>
-    <div class='col-6'>
+    <div class='col-3'>
         <div class='text-right align-middle'>   
             <div class='button tertiary-highlight'>
                 <a href="/protocol/{{ protocol_id }}">
@@ -22,8 +22,4 @@
         <p class='simulation_text'>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p>
     {% endfor %}
 </div>
-
-
-<p>{{ protocol_name }}</p>
-<p>{{ wellmap_name }}</p>
 {% endblock content %}
