@@ -142,18 +142,25 @@ def generateCommand(source_title, source_location,  matches):
             if well:
                 match = True
                 for i in range(3):
-                    destinations = destinations + "'" + letters[row_idx] + str(col_idx * 3 + i + 1) + "', "
+                    destinations = destinations + "d['" + letters[row_idx] + str(col_idx * 3 + i + 1) + "'], "
             col_idx = col_idx + 1
 
         row_idx = row_idx + 1
 
     destinations = destinations[:-2]
     if match:
-        command =  "\n" + "\t" + 'single_pipette.distribute(' + volume + ', ' + source_title + '.wells_by_name()[' + source_location + '], destination.wells_by_name()[' + destinations + '])'
+        command =  "\n" + "    " + 'single_pipette.distribute(' + volume + ', ' + source_title + ".wells_by_name()['" + source_location + "'], [" + destinations + '])'
     return command
 
 # takes protocol id and command string, writes string onto file that matches the id
 def writeToScript(protocol_id, command):
+    with open("protocol_files/{}.py".format(protocol_id), 'a') as file:
+        file.write(command)
+    return None
+
+# Sets up dictionary of destination wells in protocol file
+def writeSetup(protocol_id):
+    command = "    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']" + "\n" + "    d = {}" + "\n" + "    for letter in letters:" + "\n" + "        for i in range(1, 13):" + "\n" + "            d[letter + str(i)] = destination.wells_by_name()[letter + str(i)]"
     with open("protocol_files/{}.py".format(protocol_id), 'a') as file:
         file.write(command)
     return None
@@ -184,6 +191,7 @@ def editScriptRTPCR(protocol_id, well_map_info):
         # distribute to all matches with single-channel pipette (appendScript)
 
     clearCommands(protocol_id)
+    writeSetup(protocol_id)
 
     row_idx = 0
     for row in Source1:

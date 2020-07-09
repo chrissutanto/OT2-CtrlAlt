@@ -18,9 +18,15 @@
                 </a>
             </div>
             <div class='button highlight'>
-                <a href="/send/{{ protocol_id }}/{{ wellmap_id}}">
-                    Send to OT-2
-                </a>
+                {% if wellmap_id %}
+                    <a href="/send/{{ protocol_id }}/{{ wellmap_id}}">
+                        Send to OT-2
+                    </a>
+                {% else %}
+                    <a href="/send/{{ protocol_id }}">
+                        Send to OT-2
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

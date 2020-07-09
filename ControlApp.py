@@ -41,7 +41,9 @@ def protocolPage(protocol_id):
 def sendPage(protocol_id):
     protocol = getProtocol(protocol_id)
     wellmap = None
-    sendOT2(protocol, wellmap)
+    modfields = []
+    modFields = findModFields(protocol_id)
+    sendOT2(protocol, wellmap, modFields)
     return render_template('send.html', id=protocol_id, name=protocol['name'])
 
 @app.route('/send/<protocol_id>/<wellmap_id>')
@@ -49,7 +51,9 @@ def sendPageWellMap(protocol_id, wellmap_id):
     protocol = getProtocol(protocol_id)
     wellmap = getWellMap(wellmap_id)
     name = protocol['name'] + " with " + wellmap['name']
-    sendOT2(protocol, wellmap)
+    modfields = []
+    modFields = findModFields(protocol_id)
+    sendOT2(protocol, wellmap, modFields)
     return render_template('send.html', id=protocol_id, name=name)
 
 @app.route('/wellmapselect/<protocol_id>')

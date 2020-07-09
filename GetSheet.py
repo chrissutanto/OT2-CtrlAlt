@@ -33,14 +33,14 @@ def getService():
     service = build('sheets', 'v4', credentials=creds)
     return service
 
-def saveHistory(protocol, wellmap):
+def saveHistory(protocol, wellmap, modFields):
     service = getService()
     wellmapLink = ''
     wellmapName = ''
     if wellmap != None:
         wellmapName = wellmap['name']
         wellmapLink= 'docs.google.com/spreadsheets/d/' + wellmap['id']
-    list = [[protocol['name']], [protocol['id']], [date.today().strftime("%d/%m/%Y")], [datetime.now().strftime("%H:%M:%S")], [wellmapName], [wellmapLink]]
+    list = [[protocol['name']], [protocol['id']], [date.today().strftime("%d/%m/%Y")], [datetime.now().strftime("%H:%M:%S")], [wellmapName], [wellmapLink], [str(modFields)]]
     resource = {
         "majorDimension": "COLUMNS",
         "values": list
@@ -54,8 +54,8 @@ def saveHistory(protocol, wellmap):
     ).execute()
     print('history saved')
 
-def sendOT2(protocol, wellmap):
-    saveHistory(protocol, wellmap)
+def sendOT2(protocol, wellmap, modFields):
+    saveHistory(protocol, wellmap, modFields)
     return None
 
 # Takes rowdata, constructs 2D array of dict containing {cell color, cell value}
