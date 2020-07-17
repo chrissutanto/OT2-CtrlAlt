@@ -54,10 +54,6 @@ def saveHistory(protocol, wellmap, modFields):
     ).execute()
     print('history saved')
 
-def sendOT2(protocol, wellmap, modFields):
-    saveHistory(protocol, wellmap, modFields)
-    return None
-
 # Takes rowdata, constructs 2D array of dict containing {cell color, cell value}
 def make2dArray(rowdata):
     array = [] # pretty much a list of rows

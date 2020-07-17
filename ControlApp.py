@@ -1,7 +1,8 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
 from GetDrive import getProtocol, getProtocolList, getDownload, deleteProtocolFiles, getWellMapList, getWellMap
-from GetSheet import sendOT2, saveHistory, getWellMapData
+from GetSheet import saveHistory, getWellMapData
 from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, editScriptRTPCR, simulateProtocol
+from InterfaceOT2 import sendProtocol, setIP, getIP, firstTimeSetup
 import os.path
 from Forms import modifyForm
 from flask_wtf import Form
@@ -43,7 +44,8 @@ def sendPage(protocol_id):
     wellmap = None
     modfields = []
     modFields = findModFields(protocol_id)
-    sendOT2(protocol, wellmap, modFields)
+    sendProtocol(protocol)
+    saveHistory(protocol, wellmap, modFields)
     return render_template('send.html', id=protocol_id, name=protocol['name'])
 
 @app.route('/send/<protocol_id>/<wellmap_id>')
@@ -53,7 +55,8 @@ def sendPageWellMap(protocol_id, wellmap_id):
     name = protocol['name'] + " with " + wellmap['name']
     modfields = []
     modFields = findModFields(protocol_id)
-    sendOT2(protocol, wellmap, modFields)
+    sendProtocol(protocol)
+    saveHistory(protocol, wellmap, modFields)
     return render_template('send.html', id=protocol_id, name=name)
 
 @app.route('/wellmapselect/<protocol_id>')
@@ -100,11 +103,28 @@ def optionsPage():
 def historyPage():
     return render_template('history.html')
 
+@app.route('/firstTimeSetup')
+def firstConnection():
+    firstTimeSetup()
+    return redirect(url_for('home'))
+
 @app.route('/deleteProtocol')
 def deletePage():
     deleteProtocolFiles()
     message = 'Protocol cache deleted'
     return redirect(url_for('home'))
+
+@app.route('/connection', methods=['post', 'get'])
+def setupConnection():
+    fields = ['ip']
+    form = modifyForm(fields = fields)
+    if form.validate_on_submit():
+        results = []
+        for data in enumerate(form.fields.data):
+            results.append(data)
+        setIP(results)
+        return redirect(url_for('home'))
+    return render_template('connection.html', form=form)
 
 @app.route('/modify/<protocol_id>', methods=['post', 'get'])
 def modifyPage(protocol_id):
@@ -117,7 +137,6 @@ def modifyPage(protocol_id):
         results = []
         for data in enumerate(form.fields.data):
             results.append(data)
-        print(results)
         editModFields(protocol_id, results)
         return redirect(url_for('protocolPage', protocol_id=protocol_id))
     protocol = getProtocol(protocol_id)
