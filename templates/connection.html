@@ -19,13 +19,20 @@
 
 
     <div class='container protocol_box w-auto'>
-        <h2>Wired IP:</h2>
-        <form id="form" method="post" action="">
-            <div class='form-group'>
-                {{ form.hidden_tag() }}
-                {{ form.fields[0] }}
-            </div>
-        </form>
+        <h2>Enter Wired IP:
+            <form id="form" method="post" action="">
+                <div class='form-group'>
+                    {{ form.hidden_tag() }}
+                    {{ form.fields[0] }}
+                </div>
+            </form>
+        </h2>
+        
+        
+
+        <p>Enter the wired IP and press "Submit" to running first time setup. Wired IP must be updated everytime the OT-2 is restarted or connection is lost.</p>
+        <img src="{{url_for('static', filename='wired_ip.png')}}" width="600" style="border-radius: 10px"/>
+        
     </div>
 
     <a href='/firstTimeSetup'>
