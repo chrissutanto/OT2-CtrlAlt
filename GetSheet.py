@@ -33,14 +33,15 @@ def getService():
     service = build('sheets', 'v4', credentials=creds)
     return service
 
-def saveHistory(protocol, wellmap, modFields):
+def saveHistory(protocol, wellmap, modFields, results):
     service = getService()
     wellmapLink = ''
     wellmapName = ''
+    description = results[0][1]['value']
     if wellmap != None:
         wellmapName = wellmap['name']
         wellmapLink= 'docs.google.com/spreadsheets/d/' + wellmap['id']
-    list = [[protocol['name']], [protocol['id']], [date.today().strftime("%d/%m/%Y")], [datetime.now().strftime("%H:%M:%S")], [wellmapName], [wellmapLink], [str(modFields)]]
+    list = [[protocol['name']], [protocol['id']], [date.today().strftime("%d/%m/%Y")], [datetime.now().strftime("%H:%M:%S")], [wellmapName], [wellmapLink], [str(modFields)], [description]]
     resource = {
         "majorDimension": "COLUMNS",
         "values": list

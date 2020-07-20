@@ -38,26 +38,42 @@ def protocolPage(protocol_id):
                 wellmap = 'true'
     return render_template('protocol.html', id=protocol_id, name=protocol['name'], modifiedTime=protocol['modifiedTime'], pipettes=pipettes, labware=labware, metadata=metadata, modFields=modFields, wellmap=wellmap)
 
-@app.route('/send/<protocol_id>')
+@app.route('/send/<protocol_id>', methods=['post', 'get'])
 def sendPage(protocol_id):
     protocol = getProtocol(protocol_id)
     wellmap = None
     modfields = []
     modFields = findModFields(protocol_id)
-    sendProtocol(protocol)
-    saveHistory(protocol, wellmap, modFields)
-    return render_template('send.html', id=protocol_id, name=protocol['name'])
 
-@app.route('/send/<protocol_id>/<wellmap_id>')
+    fields = ['description']
+    form = modifyForm(fields = fields)
+    if form.validate_on_submit():
+        results = []
+        for data in enumerate(form.fields.data):
+            results.append(data)
+        sendProtocol(protocol)
+        saveHistory(protocol, wellmap, modFields, results)
+        return render_template('send.html', id = protocol_id, name=protocol['name'])
+    return render_template('description.html', id=protocol_id, name=protocol['name'], form = form)
+
+@app.route('/send/<protocol_id>/<wellmap_id>', methods=['post', 'get'])
 def sendPageWellMap(protocol_id, wellmap_id):
     protocol = getProtocol(protocol_id)
     wellmap = getWellMap(wellmap_id)
     name = protocol['name'] + " with " + wellmap['name']
     modfields = []
     modFields = findModFields(protocol_id)
-    sendProtocol(protocol)
-    saveHistory(protocol, wellmap, modFields)
-    return render_template('send.html', id=protocol_id, name=name)
+
+    fields = ['description']
+    form = modifyForm(fields = fields)
+    if form.validate_on_submit():
+        results = []
+        for data in enumerate(form.fields.data):
+            results.append(data)
+        sendProtocol(protocol)
+        saveHistory(protocol, wellmap, modFields, results)
+        return render_template('send.html', id = protocol_id, name=protocol['name'])
+    return render_template('description.html', id=protocol_id, name=name, form = form)
 
 @app.route('/wellmapselect/<protocol_id>')
 def wellMapSelectPage(protocol_id):
@@ -129,9 +145,9 @@ def setupConnection():
 @app.route('/modify/<protocol_id>', methods=['post', 'get'])
 def modifyPage(protocol_id):
     modFields = findModFields(protocol_id)
-    fields = []
-    for field in modFields:
-        fields.append(field['value'])
+    # fields = []
+    # for field in modFields:
+    #     fields.append(field['value'])
     form = modifyForm(fields=modFields)
     if form.validate_on_submit():
         results = []

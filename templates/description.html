@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='container row w-auto'>
+    <div class='col-6'>
+        <h1>Enter Description for {{ name }}</h1>
+    </div>
+    
+    <div class='col-6'>
+        <div class='text-right align-middle'>   
+            <button class="button highlight" type="submit" form="form">Submit</button>
+        </div>
+    </div>
+</div>
+
+
+<div class='container protocol_box w-auto'>
+    <h2>Description:</h2>
+    <form id="form" method="post" action="">
+        <div class='form-group'>
+            {{ form.hidden_tag() }}
+            {{ form.fields[0] }}
+        </div>
+    </form>
+    <p>The description will be saved into history along with protocol information.</p>
+</div>
+
+{% endblock content %}
