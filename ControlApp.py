@@ -1,10 +1,10 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
 from GetDrive import getProtocol, getProtocolList, getDownload, deleteProtocolFiles, getWellMapList, getWellMap
 from GetSheet import saveHistory, getWellMapData
-from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, editScriptRTPCR, simulateProtocol
+from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, editScriptRTPCR, simulateProtocol, editLabware
 from InterfaceOT2 import sendProtocol, setIP, getIP, firstTimeSetup
 import os.path
-from Forms import modifyForm
+from Forms import modifyForm, LabwareForm
 from flask_wtf import Form
 
 
@@ -141,6 +141,22 @@ def setupConnection():
         setIP(results)
         return redirect(url_for('home'))
     return render_template('connection.html', form=form)
+
+@app.route('/editLabware/<protocol_id>', methods=['post', 'get'])
+def editLabwarePage(protocol_id):
+    labwareForm = LabwareForm()
+    labwareResults = None
+    labware = findLabware(protocol_id)
+    if labwareForm.validate_on_submit():
+        labwareResultsSource = labwareForm.source.data
+        labwareResultsDestination = labwareForm.destination.data
+        editLabware(labwareResultsSource, labwareResultsDestination, protocol_id)
+        return redirect(url_for('protocolPage', protocol_id=protocol_id))
+    print('submission not validated')
+    print(labwareForm.errors)
+    protocol = getProtocol(protocol_id)
+    return render_template('editLabware.html', id=protocol_id, name=protocol['name'], form=labwareForm, labware=labware)
+
 
 @app.route('/modify/<protocol_id>', methods=['post', 'get'])
 def modifyPage(protocol_id):

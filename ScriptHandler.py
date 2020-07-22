@@ -109,6 +109,28 @@ def editModFields(protocol_id, user_input):
     protocol_file.writelines(lines)
     protocol_file.close()
 
+# Takes source and destination, edits protocol file
+def editLabware(source, destination, protocol_id):
+    lines = getLines(protocol_id)
+    for i in range(len(lines)):
+        if "# labware" in lines[i]:
+            while not "# end labware" in lines[i+1]:
+                if "source" in lines[i+1]:
+                    before = lines[i+1].split("'")[0]
+                    after = lines[i+1].split("'")[2] + "'" + lines[i+1].split("'")[3] + "'" + lines[i+1].split("'")[4]
+                    new_line = before + "'" + source + "'" + after
+                    lines[i+1] = new_line
+                if "destination" in lines[i+1]:
+                    before = lines[i+1].split("'")[0]
+                    after = lines[i+1].split("'")[2] + "'" + lines[i+1].split("'")[3] + "'" + lines[i+1].split("'")[4]
+                    new_line = before + "'" + destination + "'" + after
+                    lines[i+1] = new_line
+                i = i+1
+    protocol_file = open("protocol_files/{}.py".format(protocol_id), "w")
+    protocol_file.writelines(lines)
+    protocol_file.close()
+    
+
 # findMatch: takes source info, destination info, and key to match (value, color) and returns list of matches
 def findMatch(source, destination, matchKey):
     matches = []
@@ -212,6 +234,7 @@ def editScriptRTPCR(protocol_id, well_map_info):
             writeToScript(protocol_id, command)
             col_idx = col_idx + 1
         row_idx = row_idx + 1
+
 
 # Takes protocol id, simulates protocol file and returns log
 def simulateProtocol(protocol_id):

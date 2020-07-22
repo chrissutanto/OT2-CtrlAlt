@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='container row w-auto'>
+    <div class='col-6'>
+        <h1>Edit Source and Destination of {{ name }}</h1>
+    </div>
+    
+    <div class='col-6'>
+        <div class='text-right align-middle'>   
+            <div class='button tertiary-highlight'>
+                <a href="/protocol/{{ id }}">
+                    Back
+                </a>
+            </div>
+            <button class="button highlight" type="submit" form="form">Submit</button>
+        </div>
+    </div>
+</div>
+
+<div class='container protocol_box w-auto'>
+    <form id="form" method="post" action="">
+        <div class='form-group'>
+            {{form.hidden_tag() }}
+            {{form.source.label}} <br>
+            {{form.source}}
+        </div>
+        <div class='form-group'>
+            {{form.hidden_tag() }}
+            {{form.destination.label}} <br>
+            {{form.destination}}
+        </div>
+    </form>
+</div>
+
+
+{% endblock content %}
